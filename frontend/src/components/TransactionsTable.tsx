@@ -1,9 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { fetchTransactions } from '../services/api';
 const TransactionsTable = ({ transactions }: any) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [currentTransactions, setCurrentTransactions] = useState(transactions);
+  useEffect(() => { setCurrentTransactions(transactions) }, [transactions])
+  const filteredTransactions = useMemo(()=>{
+    return transactions.length>0 ? transactions.filter(
+      (t: any)=> t.title.includes(search.toLowerCase() ||
+      t.category.includes(search.toLowerCase())
+    )): []
+  }, [search, transactions]);
+  console.log(filteredTransactions)
   const handleSearch = async (e: any) => {
     const query = e.target.value;
     setSearch(query);
@@ -24,7 +32,7 @@ const TransactionsTable = ({ transactions }: any) => {
           type="text"
           placeholder="Search transactions"
           value={search}
-          onChange={handleSearch}
+          onChange={(e)=>setSearch(e.target.value)}
           className="border p-2 rounded w-full"
         />
       </div>
@@ -45,7 +53,7 @@ const TransactionsTable = ({ transactions }: any) => {
               <td colSpan={6} className="text-center p-4">No transactions found</td>
             </tr>
           ) : (
-            transactions?.map((transaction:any) => (
+            currentTransactions?.map((transaction: any) => (
               <tr key={transaction.id}>
                 <td className="border border-gray-300 p-2">{transaction.title}</td>
                 <td className="border border-gray-300 p-2">{transaction.description}</td>
@@ -74,7 +82,7 @@ const TransactionsTable = ({ transactions }: any) => {
           Next
         </button>
       </div>
-      {JSON.stringify(transactions)}
+      {/* {JSON.stringify(transactions)} */}
     </div>
   );
 };
