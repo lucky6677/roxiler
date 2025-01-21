@@ -27,7 +27,7 @@
 
 ```
 1. PORT=5000
-2. MONGO_URI=
+2. MONGO_URI=mongodb+srv://21677lucky:lucky123@roxiler.pjzw1.mongodb.net/?retryWrites=true&w=majority&appName=roxiler
 ```
 
 Note: To Initialize the DB, you can do a get request to
